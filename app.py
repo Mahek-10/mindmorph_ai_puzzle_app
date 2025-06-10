@@ -1,5 +1,17 @@
+import streamlit as st
 from login import require_login
-from game_launcher import launch_game  # wherever your puzzles are launched
+from main import launch_game  # This should contain your puzzle selection and game logic
 
-require_login()
-launch_game()
+# App entry point
+def main():
+    st.set_page_config(page_title="MindMorph Puzzle Hub", layout="centered")
+
+    # Require login first
+    require_login()
+
+    # Show welcome and launch puzzles
+    st.sidebar.markdown(f"👤 Logged in as: `{st.session_state['username']}`")
+    launch_game()
+
+if __name__ == "__main__":
+    main()
