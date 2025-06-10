@@ -32,9 +32,7 @@ def run_puzzle(level=1):
     user_answer = st.text_input("Your Answer").strip().lower()
     if user_answer:
         if user_answer == answer:
-           if user_answer.strip().lower() == answer:
-    st.success("🎉 Correct!")
-    return "correct"  # 👈 Add this line
-
+            st.success("🎉 Correct!")
+            return "correct"
         else:
             st.error("❌ Try again!")
