@@ -28,9 +28,8 @@ def run_puzzle(level=1):
     guess = st.text_input("Your Answer")
 
     if guess:
-        if user_answer.strip().lower() == answer:
-        st.success("🎉 Correct!")
-        return "correct"  # 👈 Add this line
-
+        if guess.strip().lower() == puzzle["answer"]:
+            st.success("🎉 Correct!")
+            return "correct"
         else:
             st.error("❌ Incorrect. Try again.")
