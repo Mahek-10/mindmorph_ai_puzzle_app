@@ -19,7 +19,9 @@ def run_puzzle(level=1):
     guess = st.text_input("Your Decryption")
 
     if guess:
-        if guess.strip().lower() == puzzle["answer"]:
-            st.success("🎉 Correct decryption!")
+        if user_answer.strip().lower() == answer:
+    st.success("🎉 Correct!")
+    return "correct"  # 👈 Add this line
+
         else:
             st.error("❌ Incorrect. Try again.")
