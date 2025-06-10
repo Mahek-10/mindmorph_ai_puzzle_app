@@ -4,14 +4,12 @@ import os
 
 USER_FILE = "users.json"
 
-# Load users from file
 def load_users():
     if os.path.exists(USER_FILE):
         with open(USER_FILE, "r") as f:
             return json.load(f)
     return {}
 
-# Save new user to file
 def save_user(username, password):
     users = load_users()
     users[username] = password
@@ -21,13 +19,11 @@ def save_user(username, password):
 def login_ui():
     st.title("🔐 MindMorph Login")
     login_tab, signup_tab = st.tabs(["Login", "Sign Up"])
-
     users = load_users()
 
     with login_tab:
         username = st.text_input("Username", key="login_user")
         password = st.text_input("Password", type="password", key="login_pass")
-
         if st.button("Login"):
             if username in users and users[username] == password:
                 st.session_state["username"] = username
@@ -38,7 +34,6 @@ def login_ui():
     with signup_tab:
         new_user = st.text_input("New Username", key="new_user")
         new_pass = st.text_input("New Password", type="password", key="new_pass")
-
         if st.button("Sign Up"):
             if new_user in users:
                 st.error("Username already exists.")
