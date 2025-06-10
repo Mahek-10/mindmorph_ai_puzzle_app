@@ -2,6 +2,8 @@ import streamlit as st
 import os
 import importlib
 import base64
+from login import login
+from launcher import launcher
 
 # Set page config
 st.set_page_config(page_title="MindMorph AI Puzzle App", layout="wide")
@@ -15,6 +17,11 @@ def load_audio(file_path):
         st.markdown(md, unsafe_allow_html=True)
 
 load_audio("assets/sounds/welcome.mp3")
+
+
+if login():
+    launcher()
+
 
 # Sidebar for puzzle selection
 puzzle = st.sidebar.selectbox("Choose a Puzzle", [
