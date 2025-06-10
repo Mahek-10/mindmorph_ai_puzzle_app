@@ -1,6 +1,5 @@
-import streamlit as st
-from login import login
-from launcher import launcher
+from login import require_login
+from game_launcher import launch_game  # wherever your puzzles are launched
 
-if login():
-    launcher()
+require_login()
+launch_game()
