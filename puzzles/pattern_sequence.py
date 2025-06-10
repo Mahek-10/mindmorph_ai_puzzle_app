@@ -31,6 +31,9 @@ def run_puzzle(level=1):
 
     if st.button("Check Answer"):
         if int(user_input) == answer:
-            st.success("🎉 Correct!")
+          if user_answer.strip().lower() == answer:
+    st.success("🎉 Correct!")
+    return "correct"  # 👈 Add this line
+
         else:
             st.error(f"❌ Incorrect. Try again.")
