@@ -29,8 +29,8 @@ def run_puzzle(level=1):
 
     if guess:
         if user_answer.strip().lower() == answer:
-    st.success("🎉 Correct!")
-    return "correct"  # 👈 Add this line
+        st.success("🎉 Correct!")
+        return "correct"  # 👈 Add this line
 
         else:
             st.error("❌ Incorrect. Try again.")
