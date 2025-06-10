@@ -3,9 +3,11 @@ import json
 import os
 import importlib
 
-# ========== USER AUTH ==========
-
+# ========== FILE PATHS ==========
 USER_FILE = "users.json"
+SCORE_FILE = "scores.json"
+
+# ========== USER AUTH ==========
 
 def load_users():
     if os.path.exists(USER_FILE):
@@ -51,17 +53,51 @@ def require_login():
         login_ui()
         st.stop()
 
+# ========== SCOREBOARD ==========
+
+def load_scores():
+    if os.path.exists(SCORE_FILE):
+        with open(SCORE_FILE, "r") as f:
+            return json.load(f)
+    return {}
+
+def save_scores(scores):
+    with open(SCORE_FILE, "w") as f:
+        json.dump(scores, f)
+
+def update_score(user, points):
+    scores = load_scores()
+    scores[user] = scores.get(user, 0) + points
+    save_scores(scores)
+    st.session_state["score"] = scores[user]
+
+def display_scoreboard():
+    scores = load_scores()
+    st.sidebar.subheader("🏆 Scoreboard")
+    if scores:
+        for user, score in sorted(scores.items(), key=lambda x: x[1], reverse=True):
+            st.sidebar.markdown(f"**{user}**: {score} pts")
+    else:
+        st.sidebar.info("No scores yet. Play to earn points!")
+
 # ========== PUZZLE LAUNCHER ==========
 
 PUZZLES = {
+    "Sudoku": "puzzles.sudoku",
+    "Word Morph": "puzzles.word_morph",
     "Logic Grid": "puzzles.logic_grid",
     "Pattern Sequence": "puzzles.pattern_sequence",
     "AI Crossword": "puzzles.ai_crossword",
     "Spot the Difference": "puzzles.spot_difference",
+    "Maze Escape": "puzzles.maze_escape",
     "Memory Matrix": "puzzles.memory_matrix",
     "Tangram AI": "puzzles.tangram_ai",
     "Cipher Cracker": "puzzles.cipher_cracker",
+    "Sliding Puzzle": "puzzles.sliding_puzzle",
     "Riddle Bot": "puzzles.riddle_bot",
+    "Match Three": "puzzles.match_three",
+    "Spatial 3D": "puzzles.spatial_3d",
+    "AI Jigsaw": "puzzles.ai_jigsaw",
 }
 
 def launch_game():
@@ -73,7 +109,11 @@ def launch_game():
     try:
         module = importlib.import_module(module_name)
         if hasattr(module, "run_puzzle"):
-            module.run_puzzle(level=level)
+            # Add context injection for scoring
+            result = module.run_puzzle(level=level)
+            if result == "correct":
+                update_score(st.session_state["username"], 10)
+                st.success("⭐ +10 points added!")
         else:
             st.error(f"The selected puzzle '{puzzle_choice}' is missing a 'run_puzzle' function.")
     except ModuleNotFoundError as e:
@@ -84,9 +124,10 @@ def launch_game():
 def main():
     st.set_page_config(page_title="MindMorph Puzzle Hub", layout="centered")
     require_login()
+
     st.sidebar.markdown(f"👤 Logged in as: `{st.session_state['username']}`")
+    display_scoreboard()
     launch_game()
 
 if __name__ == "__main__":
     main()
-
